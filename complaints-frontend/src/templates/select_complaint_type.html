@@ -1,0 +1,22 @@
+<!-- templates/select_complaint_type.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vyberte typ reklamácie</title>
+</head>
+<body>
+    <h1>Vyberte typ reklamácie</h1>
+    <form method="post">
+        {% csrf_token %}
+        <label>
+            <input type="radio" name="complaint_type" value="internal"> Interná reklamácia
+        </label>
+        <label>
+            <input type="radio" name="complaint_type" value="external"> Externá reklamácia
+        </label>
+        <button type="submit">Pokračovať</button>
+    </form>
+</body>
+</html>

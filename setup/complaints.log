@@ -1,0 +1,2 @@
+2024-06-18 13:01:16,942 - complaints.views - DEBUG - Fetching complaint with number: 141241
+2024-06-18 13:01:16,972 - complaints.views - DEBUG - Found external complaint: {'id': 1, 'model_sk': 'M1231', 'model_de': '', 'customer': 'skoda', 'pass_value': '1', 'date': '2024-06-18', 'complaint_number': '141241', 'quantity': '12', 'reason': 'fdsd', 'activities': 'dsfdsf', 'status': 'Akceptovaná', 'response_date': None, 'extra_note': 'fdsdf', 'correction_verification': 'dsfdsf', 'invoices_our_costs': '15.00', 'invoices_without_costs': None, 'total': '15.00', 'highlighted': False}
