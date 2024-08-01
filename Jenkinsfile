@@ -21,7 +21,7 @@ pipeline {
                 // Install system dependencies
                 sh '''
                 sudo apt-get update
-                sudo apt-get install -y python3.12-venv
+                sudo apt-get install -y python3.12-venv curl
                 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
                 sudo apt-get install -y nodejs
                 '''
@@ -32,9 +32,9 @@ pipeline {
             steps {
                 // Setup Python environment and install dependencies
                 sh '''
-                python3 -m venv ${VENV_DIR}
-                . ${VENV_DIR}/bin/activate
-                pip3 install -r ${REQUIREMENTS_FILE}
+                python3 -m venv ${WORKSPACE}/${VENV_DIR}
+                . ${WORKSPACE}/${VENV_DIR}/bin/activate
+                pip3 install -r ${WORKSPACE}/${REQUIREMENTS_FILE}
                 '''
             }
         }
@@ -43,8 +43,8 @@ pipeline {
             steps {
                 // Run Django tests
                 sh '''
-                . ${VENV_DIR}/bin/activate
-                cd ${BACKEND_DIR}
+                . ${WORKSPACE}/${VENV_DIR}/bin/activate
+                cd ${WORKSPACE}/${BACKEND_DIR}
                 python3 manage.py test
                 '''
             }
@@ -54,8 +54,9 @@ pipeline {
             steps {
                 // Install Node.js dependencies
                 sh '''
-                cd ${FRONTEND_DIR}
+                cd ${WORKSPACE}/${FRONTEND_DIR}
                 npm install
+                npm install canvas
                 '''
             }
         }
@@ -64,7 +65,7 @@ pipeline {
             steps {
                 // Run React tests
                 sh '''
-                cd ${FRONTEND_DIR}
+                cd ${WORKSPACE}/${FRONTEND_DIR}
                 npm test -- --watchAll=false
                 '''
             }
@@ -74,7 +75,7 @@ pipeline {
             steps {
                 // Build the React application
                 sh '''
-                cd ${FRONTEND_DIR}
+                cd ${WORKSPACE}/${FRONTEND_DIR}
                 npm run build
                 '''
             }
@@ -84,8 +85,8 @@ pipeline {
             steps {
                 // Collect static files
                 sh '''
-                . ${VENV_DIR}/bin/activate
-                cd ${BACKEND_DIR}
+                . ${WORKSPACE}/${VENV_DIR}/bin/activate
+                cd ${WORKSPACE}/${BACKEND_DIR}
                 python3 manage.py collectstatic --noinput
                 '''
             }
