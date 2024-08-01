@@ -16,6 +16,16 @@ pipeline {
             }
         }
 
+        stage('Install System Dependencies') {
+            steps {
+                // Install system dependencies
+                sh '''
+                sudo apt-get update
+                sudo apt-get install -y python3.12-venv
+                '''
+            }
+        }
+
         stage('Backend - Install Dependencies') {
             steps {
                 // Setup Python environment and install dependencies
