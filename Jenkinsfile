@@ -1,8 +1,7 @@
 pipeline {
-    agent {label "Jenkins-Agent" }
+    agent { label 'Jenkins-Agent' }
 
     environment {
-        // Nastavenie prostredia
         VENV_DIR = 'venv'
         REQUIREMENTS_FILE = 'requirements.txt'
         FRONTEND_DIR = 'complaints-frontend'
@@ -12,7 +11,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Klonovanie zdrojového kódu z Git
+                // Clone source code from Git
                 git branch: 'main', url: 'https://github.com/csw48/PASS-SK-ComplaintManager'
             }
         }
@@ -21,9 +20,9 @@ pipeline {
             steps {
                 // Setup Python environment and install dependencies
                 sh '''
-                python3 -m venv venv
-                . venv/bin/activate
-                pip3 install -r requirements.txt
+                python3 -m venv ${VENV_DIR}
+                . ${VENV_DIR}/bin/activate
+                pip3 install -r ${REQUIREMENTS_FILE}
                 '''
             }
         }
@@ -32,7 +31,7 @@ pipeline {
             steps {
                 // Run Django tests
                 sh '''
-                . venv/bin/activate
+                . ${VENV_DIR}/bin/activate
                 python3 manage.py test
                 '''
             }
@@ -42,7 +41,7 @@ pipeline {
             steps {
                 // Install Node.js dependencies
                 sh '''
-                cd complaints-frontend
+                cd ${FRONTEND_DIR}
                 npm install
                 '''
             }
@@ -52,7 +51,7 @@ pipeline {
             steps {
                 // Run React tests
                 sh '''
-                cd complaints-frontend
+                cd ${FRONTEND_DIR}
                 npm test -- --watchAll=false
                 '''
             }
@@ -62,7 +61,7 @@ pipeline {
             steps {
                 // Build the React application
                 sh '''
-                cd complaints-frontend
+                cd ${FRONTEND_DIR}
                 npm run build
                 '''
             }
@@ -72,25 +71,25 @@ pipeline {
             steps {
                 // Collect static files
                 sh '''
-                . venv/bin/activate
+                . ${VENV_DIR}/bin/activate
                 python3 manage.py collectstatic --noinput
                 '''
             }
         }
+    }
 
     post {
         always {
-            // Vyčistenie pracovného priestoru po dokončení pipeline
+            // Clean up workspace after completion
             cleanWs()
         }
         success {
-            // Oznámenie o úspešnom dokončení
+            // Notification of successful completion
             echo 'Pipeline completed successfully!'
         }
         failure {
-            // Oznámenie o neúspechu
+            // Notification of failure
             echo 'Pipeline failed.'
         }
     }
-}
 }
