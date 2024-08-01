@@ -42,6 +42,7 @@ pipeline {
                 // Run Django tests
                 sh '''
                 . ${VENV_DIR}/bin/activate
+                cd ${BACKEND_DIR}
                 python3 manage.py test
                 '''
             }
@@ -82,6 +83,7 @@ pipeline {
                 // Collect static files
                 sh '''
                 . ${VENV_DIR}/bin/activate
+                cd ${BACKEND_DIR}
                 python3 manage.py collectstatic --noinput
                 '''
             }
