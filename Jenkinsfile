@@ -12,7 +12,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Clone source code from Git
-                git branch: 'main', url: 'https://github.com/csw48/PASS-SK-ComplaintManager'
+                git branch: 'master', url: 'https://github.com/csw48/PASS-SK-ComplaintManager'
             }
         }
 
