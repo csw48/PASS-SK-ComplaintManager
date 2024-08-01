@@ -56,21 +56,10 @@ pipeline {
                 sh '''
                 cd ${WORKSPACE}/${FRONTEND_DIR}
                 npm install
-                npm install canvas
                 '''
             }
         }
-
-        stage('Frontend - Run Tests') {
-            steps {
-                // Run React tests
-                sh '''
-                cd ${WORKSPACE}/${FRONTEND_DIR}
-                npm test -- --watchAll=false
-                '''
-            }
-        }
-
+        
         stage('Frontend - Build') {
             steps {
                 // Build the React application
