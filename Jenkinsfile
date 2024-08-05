@@ -63,6 +63,12 @@ pipeline {
             }
         }
 
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
+            }
+        }
+        
         stage('Backend - Install Dependencies') {
             steps {
                 // Setup Python environment and install dependencies
@@ -116,12 +122,6 @@ pipeline {
             }
         }
     }
-
-        stage('TRIVY FS SCAN') {
-            steps {
-                sh "trivy fs . > trivyfs.txt"
-            }
-        }
 
     post {
         always {
