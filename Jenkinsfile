@@ -13,6 +13,7 @@ pipeline {
         DOCKER_PASS = 'dockerhub'
         IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
+        PATH = "${env.PATH}:${SCANNER_HOME}/bin"
         VENV_DIR = 'venv'
         REQUIREMENTS_FILE = 'requirements.txt'
         FRONTEND_DIR = 'complaints-frontend'
@@ -36,8 +37,7 @@ pipeline {
         stage("Sonarqube Analysis") {
             steps {
                 withSonarQubeEnv('SonarQube-Server') {
-                    sh '''$SCANER_HOME/bin/sonar-scanner -Dsonar.projectName=PASS-SK-ComplaintManager \
-                    -Dsonar.projectKey=PASS-SK-ComplaintManager'''
+                    sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME}"
                 }
             }
         }
