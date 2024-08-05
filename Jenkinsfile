@@ -7,7 +7,7 @@ pipeline {
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
-        APP_NAME = "PASS-SK-ComplaintManager"
+        APP_NAME = "pass-sk-complaintmanager" // Lowercase the APP_NAME
         RELEASE = "1.0.0"
         DOCKER_USER = "juhal048"
         DOCKER_PASS = 'dockerhub'
@@ -111,10 +111,10 @@ pipeline {
         stage("Build & Push Docker Image") {
             steps {
                 script {
-                    docker.withRegistry('',DOCKER_PASS) {
-                        docker_image = docker.build "${IMAGE_NAME}"
+                    docker.withRegistry('', DOCKER_PASS) {
+                        docker_image = docker.build("${IMAGE_NAME}")
                     }
-                    docker.withRegistry('',DOCKER_PASS) {
+                    docker.withRegistry('', DOCKER_PASS) {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push('latest')
                     }
