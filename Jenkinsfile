@@ -52,14 +52,12 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASS')]) {
                     sh '''
-                    echo $SUDO_PASS | sudo -S apt-get update
-                    echo $SUDO_PASS | sudo -S apt-get install -y python3.12-venv curl
+                    apt-get update
+                    apt-get install -y python3.12-venv curl
                     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-                    echo $SUDO_PASS | sudo -S apt-get install -y nodejs
+                    apt-get install -y nodejs
                     '''
-                }
             }
         }
 
