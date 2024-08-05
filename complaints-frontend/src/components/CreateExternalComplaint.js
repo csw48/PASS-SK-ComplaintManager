@@ -27,8 +27,6 @@ const CreateExternalComplaint = () => {
         highlighted: false,
     });
 
-    const [successMessage, setSuccessMessage] = useState('');
-
     const updateTotal = (costs) => {
         const total = costs.reduce((acc, item) => acc + (parseFloat(item.cost) || 0), 0);
         setFormData(prevFormData => ({
