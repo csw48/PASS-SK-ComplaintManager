@@ -52,12 +52,12 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                    sh '''
-                    sudo apt-get update
-                    sudo apt-get install -y python3.12-venv curl
-                    sudo apt-get install -y nodejs
-                    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-                    '''
+                sh '''
+                echo ${DOCKER_PASS} | sudo -S apt-get update
+                echo ${DOCKER_PASS} | sudo -S apt-get install -y python3.12-venv curl
+                echo ${DOCKER_PASS} | sudo -S apt-get install -y nodejs
+                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+                '''
             }
         }
 
