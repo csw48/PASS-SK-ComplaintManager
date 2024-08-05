@@ -1,7 +1,18 @@
 pipeline {
-    agent { label 'Jenkins-Agent' }
+    agent any
+    tools {
+        jdk 'jdk17'
+        nodejs 'node18'
+   }
 
     environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+        APP_NAME = "PASS-SK-ComplaintManager"
+        RELEASE = "1.0.0"
+        DOCKER_USER = "juhal048"
+        DOCKER_PASS = 'dockerhub'
+        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         VENV_DIR = 'venv'
         REQUIREMENTS_FILE = 'requirements.txt'
         FRONTEND_DIR = 'complaints-frontend'
@@ -9,14 +20,37 @@ pipeline {
     }
 
     stages {
+        stage('clean workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+            
         stage('Checkout') {
             steps {
                 // Clone source code from Git
-                git branch: 'master', url: 'https://github.com/csw48/PASS-SK-ComplaintManager'
+                git branch: 'master', url: 'https://github.com/csw48/PASS-SK-ComplaintManager' 
             }
         }
 
-        stage('Install System Dependencies') {
+        stage("Sonarqube Analysis") {
+            steps {
+                withSonarQubeEnv('SonarQube-Server') {
+                    sh '''$SCANER_HOME/bin/sonar-scanner -Dsonar.projectName=PASS-SK-ComplaintManager \
+                    -Dsonar.projectKey=PASS-SK-ComplaintManager'''
+                }
+            }
+        }
+
+        stage("QualityGate") {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
             steps {
                 // Install system dependencies
                 sh '''
@@ -25,6 +59,12 @@ pipeline {
                 curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
                 sudo apt-get install -y nodejs
                 '''
+            }
+        }
+
+        stage('TRIVY FS SCAN') {
+            steps {
+                sh "trivy fs . > trivyfs.txt"
             }
         }
 
