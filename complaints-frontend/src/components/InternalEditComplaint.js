@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,47 +24,47 @@ const InternalEditComplaint = () => {
         note: '',
     });
 
-    const RESPONSIBLE_MAP = {
-        "S.Yüksekol": "Salih Yüksekol",
-        "G.Verzi": "Giuseppe Verzi",
-        "M.Stach": "Marek Stach",
-        "G.Wacławski": "Grzegorz Wacławski",
-        "S.Ilič": "Sanja Ilič",
-        "Salih Yüksekol": "Salih Yüksekol",
-        "Giuseppe Verzi": "NEMECKO Gumy: Giuseppe Verzi",
-        "Marek Stach": "POĽSKO Gumy Marek Stach, Łukasz Jachlewski.",
-        "Grzegorz Wacławski": "POĽSKO Kovové rúrky Grzegorz Wacławski, Paweł Fejdasz",
-        "Sanja Ilič": "BOSNA: Sanja Ilič",
-        "Yuksekol": "Salih Yüksekol",
-        "S. Yüksekol": "Salih Yüksekol",
-        "G. Verzi": "Giuseppe Verzi",
-        "M. Stach": "Marek Stach",
-        "G. Wacławski": "Grzegorz Wacławski",
-        "S. Ilič": "Sanja Ilič",
-    };
+    const fetchComplaintData = useCallback(() => {
+        const RESPONSIBLE_MAP = {
+            "S.Yüksekol": "Salih Yüksekol",
+            "G.Verzi": "Giuseppe Verzi",
+            "M.Stach": "Marek Stach",
+            "G.Wacławski": "Grzegorz Wacławski",
+            "S.Ilič": "Sanja Ilič",
+            "Salih Yüksekol": "Salih Yüksekol",
+            "Giuseppe Verzi": "NEMECKO Gumy: Giuseppe Verzi",
+            "Marek Stach": "POĽSKO Gumy Marek Stach, Łukasz Jachlewski.",
+            "Grzegorz Wacławski": "POĽSKO Kovové rúrky Grzegorz Wacławski, Paweł Fejdasz",
+            "Sanja Ilič": "BOSNA: Sanja Ilič",
+            "Yuksekol": "Salih Yüksekol",
+            "S. Yüksekol": "Salih Yüksekol",
+            "G. Verzi": "Giuseppe Verzi",
+            "M. Stach": "Marek Stach",
+            "G. Wacławski": "Grzegorz Wacławski",
+            "S. Ilič": "Sanja Ilič",
+        };
 
-    const CREATED_BY_MAP = {
-        "T.Geletka": "Geletka",
-        "P.Staňa": "Staňa",
-        "S.Pamula": "Pamula",
-        "S.Spielmann": "Spielmann",
-        "M.Kaščáková": "Kaščáková",
-        "L.Augustin": "Augustin",
-        "Geletka": "Geletka",
-        "Staňa": "Staňa",
-        "Pamula": "Pamula",
-        "Spielmann": "Spielmann",
-        "Kaščáková": "Kaščáková",
-        "Augustin": "Augustin",
-        "T. Geletka": "Geletka",
-        "P. Staňa": "Staňa",
-        "S. Pamula": "Pamula",
-        "S. Spielmann": "Spielmann",
-        "M. Kaščáková": "Kaščáková",
-        "L. Augustin": "Augustin",
-    };
+        const CREATED_BY_MAP = {
+            "T.Geletka": "Geletka",
+            "P.Staňa": "Staňa",
+            "S.Pamula": "Pamula",
+            "S.Spielmann": "Spielmann",
+            "M.Kaščáková": "Kaščáková",
+            "L.Augustin": "Augustin",
+            "Geletka": "Geletka",
+            "Staňa": "Staňa",
+            "Pamula": "Pamula",
+            "Spielmann": "Spielmann",
+            "Kaščáková": "Kaščáková",
+            "Augustin": "Augustin",
+            "T. Geletka": "Geletka",
+            "P. Staňa": "Staňa",
+            "S. Pamula": "Pamula",
+            "S. Spielmann": "Spielmann",
+            "M. Kaščáková": "Kaščáková",
+            "L. Augustin": "Augustin",
+        };
 
-    const fetchComplaintData = () => {
         authAxios.get(`/api/get-complaint/${complaintNumber}/`)
             .then(response => {
                 if (response.data) {
@@ -77,11 +77,11 @@ const InternalEditComplaint = () => {
             .catch(error => {
                 console.error('There was an error fetching the complaint!', error);
             });
-    };
+    }, [authAxios, complaintNumber]);
 
     useEffect(() => {
         fetchComplaintData();
-    }, [complaintNumber]);
+    }, [fetchComplaintData]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -93,18 +93,58 @@ const InternalEditComplaint = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        const RESPONSIBLE_MAP = {
+            "S.Yüksekol": "Salih Yüksekol",
+            "G.Verzi": "Giuseppe Verzi",
+            "M.Stach": "Marek Stach",
+            "G.Wacławski": "Grzegorz Wacławski",
+            "S.Ilič": "Sanja Ilič",
+            "Salih Yüksekol": "Salih Yüksekol",
+            "Giuseppe Verzi": "NEMECKO Gumy: Giuseppe Verzi",
+            "Marek Stach": "POĽSKO Gumy Marek Stach, Łukasz Jachlewski.",
+            "Grzegorz Wacławski": "POĽSKO Kovové rúrky Grzegorz Wacławski, Paweł Fejdasz",
+            "Sanja Ilič": "BOSNA: Sanja Ilič",
+            "Yuksekol": "Salih Yüksekol",
+            "S. Yüksekol": "Salih Yüksekol",
+            "G. Verzi": "Giuseppe Verzi",
+            "M. Stach": "Marek Stach",
+            "G. Wacławski": "Grzegorz Wacławski",
+            "S. Ilič": "Sanja Ilič",
+        };
+
+        const CREATED_BY_MAP = {
+            "T.Geletka": "Geletka",
+            "P.Staňa": "Staňa",
+            "S.Pamula": "Pamula",
+            "S.Spielmann": "Spielmann",
+            "M.Kaščáková": "Kaščáková",
+            "L.Augustin": "Augustin",
+            "Geletka": "Geletka",
+            "Staňa": "Staňa",
+            "Pamula": "Pamula",
+            "Spielmann": "Spielmann",
+            "Kaščáková": "Kaščáková",
+            "Augustin": "Augustin",
+            "T. Geletka": "Geletka",
+            "P. Staňa": "Staňa",
+            "S. Pamula": "Pamula",
+            "S. Spielmann": "Spielmann",
+            "M. Kaščáková": "Kaščáková",
+            "L. Augustin": "Augustin",
+        };
+
         const data = { ...complaintData };
         data.responsible = RESPONSIBLE_MAP[data.responsible] || data.responsible;
         data.created_by = CREATED_BY_MAP[data.created_by] || data.created_by;
 
         authAxios.put(`/api/update-complaint/${complaintNumber}/`, data)
-            .then(response => {
+            .then(() => {
                 toast.success('Reklamácia bola úspešne upravená.');
                 setTimeout(() => {
                     navigate('/internal-complaints');
                 }, 2000);
             })
-            .catch(error => {
+            .catch(() => {
                 toast.error('Aktualizácia reklamácie zlyhala. Skúste to prosím znova.');
             });
     };
@@ -112,7 +152,6 @@ const InternalEditComplaint = () => {
     const handleGoBack = () => {
         navigate(-1);
     };
-
     return (
         <div className="container mx-auto px-4 py-6">
             <ToastContainer />
