@@ -13,7 +13,7 @@ const InternalComplaints = () => {
     const { authAxios } = useContext(AuthContext);
     const [complaints, setComplaints] = useState([]);
     const [sortOrder, setSortOrder] = useState('desc');
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage] = useState(1);
     const [filterText, setFilterText] = useState('');
     const navigate = useNavigate();
 
