@@ -3,7 +3,7 @@ pipeline {
     tools {
         jdk 'jdk17'
         nodejs 'node18'
-   }
+    }
 
     environment {
         SCANNER_HOME = tool 'sonar-scanner'
@@ -11,7 +11,7 @@ pipeline {
         RELEASE = "1.0.0"
         DOCKER_USER = "juhal048"
         DOCKER_PASS = 'dockerhub'
-        IMAGE_NAME = "${DOCKER_USER}" + "/" + "${APP_NAME}"
+        IMAGE_NAME = "${DOCKER_USER}/${APP_NAME}"
         IMAGE_TAG = "${RELEASE}-${BUILD_NUMBER}"
         PATH = "${env.PATH}:${SCANNER_HOME}/bin"
         VENV_DIR = 'venv'
@@ -26,11 +26,11 @@ pipeline {
                 cleanWs()
             }
         }
-            
+
         stage('Checkout') {
             steps {
                 // Clone source code from Git
-                git branch: 'master', url: 'https://github.com/csw48/PASS-SK-ComplaintManager' 
+                git branch: 'master', url: 'https://github.com/csw48/PASS-SK-ComplaintManager'
             }
         }
 
@@ -99,7 +99,7 @@ pipeline {
                 '''
             }
         }
-        
+
         stage('Frontend - Build') {
             steps {
                 // Build the React application
