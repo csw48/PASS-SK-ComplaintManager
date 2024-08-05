@@ -108,23 +108,7 @@ pipeline {
             }
         }
 
-        stage('Backend - Collect Static Files') {
-            steps {
-                // Collect static files
-                sh '''
-                . ${WORKSPACE}/${VENV_DIR}/bin/activate
-                cd ${WORKSPACE}/${BACKEND_DIR}
-                python3 manage.py collectstatic --noinput
-                '''
-            }
-        }
-    }
-
     post {
-        always {
-            // Clean up workspace after completion
-            cleanWs()
-        }
         success {
             // Notification of successful completion
             echo 'Pipeline completed successfully!'
