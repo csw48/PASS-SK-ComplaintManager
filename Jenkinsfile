@@ -52,13 +52,14 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // Install system dependencies
-                sh '''
-                sudo apt-get update
-                sudo apt-get install -y python3.12-venv curl
-                curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-                sudo apt-get install -y nodejs
-                '''
+                withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASS')]) {
+                    sh '''
+                    echo $SUDO_PASS | sudo -S apt-get update
+                    echo $SUDO_PASS | sudo -S apt-get install -y python3.12-venv curl
+                    curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+                    echo $SUDO_PASS | sudo -S apt-get install -y nodejs
+                    '''
+                }
             }
         }
 
