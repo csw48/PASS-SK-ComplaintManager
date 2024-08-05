@@ -54,10 +54,10 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'sudo-password', variable: 'SUDO_PASS')]) {
                     sh '''
-                    sudo apt-get update
-                    sudo apt-get install -y python3.12-venv curl
+                    echo $SUDO_PASS | sudo -S apt-get update
+                    echo $SUDO_PASS | sudo -S apt-get install -y python3.12-venv curl
                     curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-                    sudo apt-get install -y nodejs
+                    echo $SUDO_PASS | sudo -S apt-get install -y nodejs
                     '''
                 }
             }
@@ -68,7 +68,7 @@ pipeline {
                 sh "trivy fs . > trivyfs.txt"
             }
         }
-        
+
         stage('Backend - Install Dependencies') {
             steps {
                 // Setup Python environment and install dependencies
