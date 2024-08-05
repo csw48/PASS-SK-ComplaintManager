@@ -18,6 +18,7 @@ pipeline {
         REQUIREMENTS_FILE = 'requirements.txt'
         FRONTEND_DIR = 'complaints-frontend'
         BACKEND_DIR = 'setup'
+	JENKINS_API_TOKEN = credentials("JENKINS_API_TOKEN")
     }
 
     stages {
