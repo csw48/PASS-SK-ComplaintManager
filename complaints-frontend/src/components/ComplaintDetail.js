@@ -28,7 +28,7 @@ const ComplaintDetail = () => {
                 setError(error.message);
                 setLoading(false);
             });
-    }, [complaintNumber]);
+    }, [authAxios, complaintNumber]);
 
     useEffect(() => {
         fetchComplaintDetail();
