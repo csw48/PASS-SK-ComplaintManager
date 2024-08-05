@@ -22,7 +22,7 @@ const Statistics = () => {
         };
 
         fetchModels();
-    }, []);
+    }, [authAxios]);
 
     useEffect(() => {
         if (selectedModel) {
@@ -47,7 +47,7 @@ const Statistics = () => {
             fetchModelComplaintCount();
             fetchModelComplaintReasons();
         }
-    }, [selectedModel]);
+    }, [selectedModel, authAxios]);
 
     return (
         <div className="p-6 bg-gray-100 min-h-screen">
