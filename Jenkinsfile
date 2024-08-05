@@ -21,7 +21,7 @@ pipeline {
     }
 
     stages {
-        stage('clean workspace') {
+        stage('Clean Workspace') {
             steps {
                 cleanWs()
             }
@@ -34,7 +34,7 @@ pipeline {
             }
         }
 
-        stage("Sonarqube Analysis") {
+        stage("SonarQube Analysis") {
             steps {
                 withSonarQubeEnv('SonarQube-Server') {
                     sh "${SCANNER_HOME}/bin/sonar-scanner -Dsonar.projectName=${APP_NAME} -Dsonar.projectKey=${APP_NAME}"
@@ -42,7 +42,7 @@ pipeline {
             }
         }
 
-        stage("QualityGate") {
+        stage("Quality Gate") {
             steps {
                 script {
                     waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Token'
@@ -60,7 +60,7 @@ pipeline {
             }
         }
 
-        stage('TRIVY FS SCAN') {
+        stage('TRIVY FS Scan') {
             steps {
                 sh "trivy fs . > trivyfs.txt"
             }
@@ -107,6 +107,7 @@ pipeline {
                 '''
             }
         }
+    }
 
     post {
         success {
@@ -117,6 +118,5 @@ pipeline {
             // Notification of failure
             echo 'Pipeline failed.'
         }
-    }
     }
 }
