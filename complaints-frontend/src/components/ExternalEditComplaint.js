@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +38,7 @@ const ExternalEditComplaint = () => {
             .catch(error => {
                 console.error('There was an error fetching the complaint!', error);
             });
-    }, [complaintNumber]);
+    }, [authAxios, complaintNumber]);
 
     const handleChange = (event) => {
         const { name, value, type, checked } = event.target;
