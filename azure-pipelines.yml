@@ -6,7 +6,7 @@ pool:
 
 variables:
   pythonVersion: '3.12'
-  djangoSettings: 'production.py'
+  djangoSettings: 'deployment.py'
 
 stages:
 - stage: CI
