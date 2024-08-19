@@ -1,0 +1,60 @@
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  pythonVersion: '3.12'
+  djangoSettings: 'production.py'
+
+stages:
+- stage: CI
+  jobs:
+  - job: BuildAndTest
+    steps:
+    - checkout: self
+      displayName: 'Checkout Code'
+
+    - task: NodeTool@0
+      inputs:
+        versionSource: 'spec'
+        versionSpec: '18.x'
+      displayName: 'Install Node.js'
+
+    - task: Npm@1
+      inputs:
+        command: 'install'
+        workingDir: 'complaints-frontend'
+      displayName: 'Install Frontend'
+    
+    - task: Npm@1
+      inputs:
+        command: 'custom'
+        workingDir: 'complaints-frontend'
+        customCommand: 'run build'
+      displayName: 'Build Frontend'
+
+    - task: UsePythonVersion@0
+      inputs:
+        versionSpec: '$(pythonVersion)'
+      displayName: 'Set Python Version'
+
+    - script: |
+        python -m venv venv
+        source venv/bin/activate
+        pip install -r requirements.txt
+      workingDirectory: 'setup'
+      displayName: 'Install Python Dependencies'
+
+    - script: |
+        python manage.py test --settings=$(djangoSettings)
+      workingDirectory: 'setup'
+      displayName: 'Run Django Tests'
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'Docker'
+        repository: 'CopmplaintManager'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
